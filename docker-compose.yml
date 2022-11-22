@@ -1,0 +1,43 @@
+version:  '3.9'
+services:
+  movie-service:
+    image:  movie_image
+    container_name: movie-service
+    build:  userMovieDemo/
+    restart:  always
+    network_mode: user-network
+    ports:
+      - 8089:8089
+    depends_on:
+      - mongoService
+
+  mongoService:
+    image:  mongo
+    container_name: mongoService
+    ports:
+      - 27017:27017
+    network_mode: user-network
+
+  authentication-service:
+    image:  authentication_image
+    container_name: authentication-service
+    build:  userDemo/
+    restart:  always
+    network_mode: user-network
+    ports:
+      - 8088:8088
+    depends_on:
+      - mysqlService
+
+  mysqlService:
+    image:  mysql:latest
+    container_name: mysqlService
+    network_mode: user-network
+    ports:
+      - 3306:3306
+
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USERNAME: root
+      MYSQL_PASSWORD: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
