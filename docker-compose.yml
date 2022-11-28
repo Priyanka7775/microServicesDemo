@@ -7,9 +7,11 @@ services:
     restart:  always
     network_mode: user-network
     ports:
-      - 8089:8089
+      - 8081:8081
     depends_on:
       - mongoService
+      - apigateway
+      - eureka-service
 
   mongoService:
     image:  mongo
@@ -28,6 +30,7 @@ services:
       - 8088:8088
     depends_on:
       - mysqlService
+      - apigateway
 
   mysqlService:
     image:  mysql:latest
@@ -41,3 +44,18 @@ services:
       MYSQL_USERNAME: root
       MYSQL_PASSWORD: root
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
+  apigateway:
+    container_name: apigateway
+    build:  demoapigateway/
+    network_mode: user-network
+    ports:
+      - 9000:9000
+
+  eureka-service:
+    container_name: eureka-service
+    build:  demoEureka/
+    restart:  always
+    network_mode: user-network
+    ports:
+      - 8761:8761
