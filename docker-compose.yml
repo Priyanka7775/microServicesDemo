@@ -7,7 +7,7 @@ services:
     restart:  always
     network_mode: user-network
     ports:
-      - 8081:8081
+      - 9700:9700
     depends_on:
       - mongoService
       - apigateway
@@ -31,6 +31,7 @@ services:
     depends_on:
       - mysqlService
       - apigateway
+      - eureka-service
 
   mysqlService:
     image:  mysql:latest
@@ -50,7 +51,9 @@ services:
     build:  demoapigateway/
     network_mode: user-network
     ports:
-      - 9000:9000
+      - 9701:9701
+    depends_on:
+      - eureka-service
 
   eureka-service:
     container_name: eureka-service

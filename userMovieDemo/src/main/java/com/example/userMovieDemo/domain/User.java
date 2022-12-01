@@ -10,7 +10,7 @@ public class User {
     @Id
     private String email;
     private int userId;
-
+    private String password;
     private String userName;
     private String address;
     private long mobileNumber;
@@ -19,9 +19,10 @@ public class User {
 
     public User(){}
 
-    public User(String email, int userId, String userName, String address, long mobileNumber, List<Movie> movies) {
+    public User(String email, int userId, String password, String userName, String address, long mobileNumber, List<Movie> movies) {
         this.email = email;
         this.userId = userId;
+        this.password = password;
         this.userName = userName;
         this.address = address;
         this.mobileNumber = mobileNumber;
@@ -76,11 +77,20 @@ public class User {
         this.mobileNumber = mobileNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "email='" + email + '\'' +
                 ", userId=" + userId +
+                ", password='" + password + '\'' +
                 ", userName='" + userName + '\'' +
                 ", address='" + address + '\'' +
                 ", mobileNumber=" + mobileNumber +

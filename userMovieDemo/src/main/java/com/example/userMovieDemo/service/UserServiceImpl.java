@@ -4,8 +4,10 @@ import com.example.userMovieDemo.domain.Movie;
 import com.example.userMovieDemo.domain.User;
 import com.example.userMovieDemo.exception.UserAlreadyFoundException;
 import com.example.userMovieDemo.exception.UserNotFoundException;
+import com.example.userMovieDemo.proxy.UserProxy;
 import com.example.userMovieDemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -15,7 +17,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
-    public UserServiceImpl(UserRepository userRepository){
+
+    @Autowired
+    private UserProxy userProxy;
+    public UserServiceImpl(UserRepository userRepository,UserProxy userProxy){
+        this.userProxy=userProxy;
         this.userRepository=userRepository;
     }
     @Override
@@ -23,8 +29,14 @@ public class UserServiceImpl implements UserService{
         if(userRepository.findById(user.getEmail()).isPresent()) {
             throw new UserAlreadyFoundException();
         }
-        return userRepository.insert(user);
+        User user1 = userRepository.save(user);
+        if(!(user1.getEmail().isEmpty())){
+            ResponseEntity responseEntity = userProxy.saveUser(user);
+            System.out.println(responseEntity.getBody());
         }
+        return user1;
+    }
+
 
     @Override
     public User addMovieForUser(String email, Movie movie) throws UserNotFoundException {
